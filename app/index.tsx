@@ -1,13 +1,9 @@
-import { Text, View } from 'react-native'
-import "./../global.css"
-
+import { Redirect } from "expo-router"
+import React from "react"
 
 const Index = () => {
-  return (
-    <View>
-      <Text className="text-red-600 font-bold">Index</Text>
-    </View>
-  )
+  // Redirect to login by default - auth logic in _layout will handle the rest
+  return <Redirect href="/(auth)/login" />
 }
 
 export default Index
