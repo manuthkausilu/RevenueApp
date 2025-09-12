@@ -28,7 +28,7 @@ const Login = () => {
     await login(email, password)
       .then((res) => {
         console.log(res)
-        router.replace("/(app)/home")
+        router.replace("/(tabs)")
       })
       .catch((err) => {
         console.error(err)

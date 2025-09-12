@@ -14,14 +14,14 @@ const InitialLayout = () => {
     // Wait until auth state is loaded
     if (loading) return
 
-    const inAuthGroup = segments[0] === "(auth)"
+    const inTabsGroup = segments[0] === "(tabs)"
 
-    // If user is logged in and tries to access auth screens, redirect to home
-    if (user && inAuthGroup) {
-      router.replace("/(app)/home")
+    // If user is logged in and tries to access auth screens, redirect to tabs
+    if (user && !inTabsGroup) {
+      router.replace("/(tabs)")
     } 
     // If user is not logged in and is not in the auth group, redirect to login
-    else if (!user && !inAuthGroup) {
+    else if (!user && inTabsGroup) {
       router.replace("/(auth)/login")
     }
   }, [user, loading, segments, router])
@@ -29,7 +29,7 @@ const InitialLayout = () => {
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" />
+        <ActivityIndicator size="large" color="#3b82f6" />
       </View>
     )
   }
