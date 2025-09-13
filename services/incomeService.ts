@@ -52,3 +52,9 @@ export const deleteIncome = async (id: string) => {
   const docRef = doc(db, "incomes", id);
   await deleteDoc(docRef);
 };
+
+// Get total income
+export const getTotalIncome = async (): Promise<number> => {
+  const incomes = await getIncomes();
+  return incomes.reduce((total, income) => total + income.amount, 0);
+};

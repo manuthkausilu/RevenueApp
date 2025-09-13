@@ -50,3 +50,9 @@ export const deleteExpense = async (id: string) => {
   const docRef = doc(db, "expenses", id);
   await deleteDoc(docRef);
 };
+
+// Get total expenses
+export const getTotalExpenses = async (): Promise<number> => {
+  const expenses = await getExpenses();
+  return expenses.reduce((total, expense) => total + expense.amount, 0);
+};
