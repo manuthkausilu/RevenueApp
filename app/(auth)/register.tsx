@@ -15,45 +15,76 @@ import { register } from "../../services/authService"
 const Register = () => {
   const router = useRouter()
   const [email, setEmail] = useState<string>("")
-  const [password, setPasword] = useState<string>("")
-  const [isLodingReg, setIsLoadingReg] = useState<boolean>(false)
+  const [password, setPassword] = useState<string>("")
+  const [name, setName] = useState<string>("")
+  const [isLoadingReg, setIsLoadingReg] = useState<boolean>(false)
+
+  const validateForm = () => {
+    if (!name.trim()) {
+      Alert.alert("Error", "Please enter your full name");
+      return false;
+    }
+    if (!email.trim()) {
+      Alert.alert("Error", "Please enter your email address");
+      return false;
+    }
+    if (!email.includes("@")) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return false;
+    }
+    if (password.length < 6) {
+      Alert.alert("Error", "Password must be at least 6 characters long");
+      return false;
+    }
+    return true;
+  };
 
   const handleRegister = async () => {
-    // if(!email){
-
-    // }
-    // 
-    if (isLodingReg) return
-    setIsLoadingReg(true)
-    await register(email, password)
-      .then((res) => {
-        console.log(res)
-        router.replace("/(tabs)")
-      })
-      .catch((err) => {
-        console.error(err)
-        Alert.alert("Registration fail", "Somthing went wrong")
-        // import { Alert } from "react-native"
-      })
-      .finally(() => {
-        setIsLoadingReg(false)
-      })
-  }
+    if (isLoadingReg) return;
+    
+    if (!validateForm()) return;
+    
+    setIsLoadingReg(true);
+    
+    try {
+      await register(email.trim(), password, name.trim());
+      Alert.alert(
+        "Success", 
+        "Account created successfully! Please sign in.",
+        [{ text: "OK", onPress: () => router.replace("/(auth)/login") }]
+      );
+    } catch (err: any) {
+      console.error(err);
+      let errorMessage = "Something went wrong. Please try again.";
+      
+      if (err.code === "auth/email-already-in-use") {
+        errorMessage = "Email address is already in use. Please use a different email.";
+      } else if (err.code === "auth/weak-password") {
+        errorMessage = "Password is too weak. Please choose a stronger password.";
+      } else if (err.code === "auth/invalid-email") {
+        errorMessage = "Invalid email address format.";
+      }
+      
+      Alert.alert("Registration Failed", errorMessage);
+    } finally {
+      setIsLoadingReg(false);
+    }
+  };
 
   return (
     <LinearGradient
-      colors={['#dcfce7', '#d1fae5', '#a7f3d0']}
+      colors={['#1f2937', '#111827', '#000000']}
       style={{ flex: 1 }}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
     >
       {/* Header Section */}
       <View className="flex-1 justify-center px-6">
-        <View className="bg-white rounded-3xl p-8 mx-2" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.15, shadowRadius: 20, elevation: 10 }}>
+        <View className="bg-gray-800 rounded-3xl p-8 mx-2" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.15, shadowRadius: 20, elevation: 10 }}>
           {/* Logo/Icon Section */}
           <View className="items-center mb-8">
             <LinearGradient
-              colors={['#10b981', '#059669']}
+              colors={['#374151', '#1f2937']}
               style={{
                 width: 80,
                 height: 80,
@@ -65,17 +96,29 @@ const Register = () => {
             >
               <Text className="text-white text-3xl font-bold">📊</Text>
             </LinearGradient>
-            <Text className="text-3xl font-bold text-gray-800 mb-2">Create Account</Text>
-            <Text className="text-gray-500 text-center">Join Revenue Tracker and manage your finances</Text>
+            <Text className="text-2xl font-bold text-white mb-2">Create Account</Text>
+            <Text className="text-gray-300 text-center">Join Revenue Tracker and manage your finances</Text>
           </View>
 
           {/* Input Fields */}
           <View className="mb-6">
             <View className="mb-4">
-              <Text className="text-gray-700 text-sm font-medium mb-2">Email Address</Text>
+              <Text className="text-gray-300 text-sm font-medium mb-2">Full Name</Text>
+              <TextInput
+                placeholder="Enter your full name"
+                className="bg-gray-700 border-2 border-gray-600 rounded-xl px-4 py-4 text-white text-base"
+                placeholderTextColor="#9CA3AF"
+                value={name}
+                onChangeText={setName}
+                autoCapitalize="words"
+                style={{ fontSize: 16 }}
+              />
+            </View>
+            <View className="mb-4">
+              <Text className="text-gray-300 text-sm font-medium mb-2">Email Address</Text>
               <TextInput
                 placeholder="Enter your email"
-                className="bg-gray-50 border-2 border-gray-100 rounded-xl px-4 py-4 text-gray-800 text-base"
+                className="bg-gray-700 border-2 border-gray-600 rounded-xl px-4 py-4 text-white text-base"
                 placeholderTextColor="#9CA3AF"
                 value={email}
                 onChangeText={setEmail}
@@ -86,14 +129,14 @@ const Register = () => {
             </View>
             
             <View className="mb-4">
-              <Text className="text-gray-700 text-sm font-medium mb-2">Password</Text>
+              <Text className="text-gray-300 text-sm font-medium mb-2">Password</Text>
               <TextInput
                 placeholder="Create a strong password"
-                className="bg-gray-50 border-2 border-gray-100 rounded-xl px-4 py-4 text-gray-800 text-base"
+                className="bg-gray-700 border-2 border-gray-600 rounded-xl px-4 py-4 text-white text-base"
                 placeholderTextColor="#9CA3AF"
                 secureTextEntry
                 value={password}
-                onChangeText={setPasword}
+                onChangeText={setPassword}
                 style={{ fontSize: 16 }}
               />
               <Text className="text-xs text-gray-400 mt-1">
@@ -105,11 +148,11 @@ const Register = () => {
           {/* Register Button */}
           <TouchableOpacity
             onPress={handleRegister}
-            disabled={isLodingReg}
-            style={{ borderRadius: 12, marginBottom: 16, shadowColor: '#10B981', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 }}
+            disabled={isLoadingReg}
+            style={{ borderRadius: 12, marginBottom: 16, shadowColor: '#374151', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 }}
           >
             <LinearGradient
-              colors={['#10b981', '#059669']}
+              colors={['#374151', '#1f2937']}
               style={{
                 paddingVertical: 16,
                 borderRadius: 12,
@@ -117,7 +160,7 @@ const Register = () => {
                 alignItems: 'center'
               }}
             >
-              {isLodingReg ? (
+              {isLoadingReg ? (
                 <ActivityIndicator color="#fff" size="small" />
               ) : (
                 <Text className="text-center text-lg font-semibold text-white">Create Account</Text>
@@ -126,22 +169,22 @@ const Register = () => {
           </TouchableOpacity>
 
           {/* Terms */}
-          <Text className="text-center text-xs text-gray-500 mb-4">
+          <Text className="text-center text-xs text-gray-400 mb-4">
             By creating an account, you agree to our Terms of Service and Privacy Policy
           </Text>
 
           {/* Divider */}
           <View className="flex-row items-center mb-4">
-            <View className="flex-1 h-px bg-gray-200" />
-            <Text className="mx-4 text-gray-500 text-sm">or</Text>
-            <View className="flex-1 h-px bg-gray-200" />
+            <View className="flex-1 h-px bg-gray-600" />
+            <Text className="mx-4 text-gray-400 text-sm">or</Text>
+            <View className="flex-1 h-px bg-gray-600" />
           </View>
 
           {/* Login Link */}
           <Pressable onPress={() => router.back()}>
             <Text className="text-center text-base">
-              <Text className="text-gray-600">Already have an account? </Text>
-              <Text className="text-green-600 font-semibold">Sign In</Text>
+              <Text className="text-gray-400">Already have an account? </Text>
+              <Text className="text-blue-400 font-semibold">Sign In</Text>
             </Text>
           </Pressable>
         </View>
@@ -149,7 +192,7 @@ const Register = () => {
 
       {/* Footer */}
       <View className="pb-8 px-6">
-        <Text className="text-center text-gray-400 text-sm">
+        <Text className="text-center text-gray-500 text-sm">
           © 2024 Revenue Tracker. All rights reserved.
         </Text>
       </View>

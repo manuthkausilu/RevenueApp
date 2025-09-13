@@ -1,6 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getReactNativePersistence, initializeAuth } from "firebase/auth";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCJlGf_Y2JYZ5CHrv5f-mldZYafnKPfPKg",
@@ -13,5 +14,23 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig)
 
-export const auth = getAuth(app)
+// export const auth = getAuth(app)
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
 export const db = getFirestore(app)
+
+// New function to save user data to Firestore
+export const saveUserToFirestore = async (uid: string, userData: { email: string; [key: string]: any }) => {
+  try {
+    const userDocRef = doc(db, 'users', uid);
+    await setDoc(userDocRef, {
+      ...userData,
+      createdAt: new Date(),
+    });
+    console.log('User saved to Firestore');
+  } catch (error) {
+    console.error('Error saving user to Firestore:', error);
+    throw error;
+  }
+};

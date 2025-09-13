@@ -16,16 +16,17 @@ const InitialLayout = () => {
 
     const inTabsGroup = segments[0] === "(tabs)"
 
-    // If user is logged in and tries to access auth screens, redirect to tabs
+    // If user is logged in, redirect to dashboard (tabs index)
     if (user && !inTabsGroup) {
-      router.replace("/(tabs)")
+      router.replace("/")  // Redirect to root index (dashboard)
     } 
-    // If user is not logged in and is not in the auth group, redirect to login
+    // If user is not logged in, redirect to login
     else if (!user && inTabsGroup) {
       router.replace("/(auth)/login")
     }
   }, [user, loading, segments, router])
 
+  // Show loading spinner while checking auth
   if (loading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>

@@ -15,45 +15,69 @@ import { login } from "../../services/authService"
 const Login = () => {
   const router = useRouter()
   const [email, setEmail] = useState<string>("")
-  const [password, setPasword] = useState<string>("")
-  const [isLodingReg, setIsLoadingReg] = useState<boolean>(false)
+  const [password, setPassword] = useState<string>("")
+  const [isLoadingLogin, setIsLoadingLogin] = useState<boolean>(false)
+
+  const validateForm = () => {
+    if (!email.trim()) {
+      Alert.alert("Error", "Please enter your email address");
+      return false;
+    }
+    if (!email.includes("@")) {
+      Alert.alert("Error", "Please enter a valid email address");
+      return false;
+    }
+    if (!password) {
+      Alert.alert("Error", "Please enter your password");
+      return false;
+    }
+    return true;
+  };
 
   const handleLogin = async () => {
-    // if(!email){
-
-    // }
-    //
-    if (isLodingReg) return
-    setIsLoadingReg(true)
-    await login(email, password)
-      .then((res) => {
-        console.log(res)
-        router.replace("/(tabs)")
-      })
-      .catch((err) => {
-        console.error(err)
-        Alert.alert("Login failed", "Somthing went wrong")
-        // import { Alert } from "react-native"
-      })
-      .finally(() => {
-        setIsLoadingReg(false)
-      })
-  }
+    if (isLoadingLogin) return;
+    
+    if (!validateForm()) return;
+    
+    setIsLoadingLogin(true);
+    
+    try {
+      await login(email.trim(), password);
+      // Navigation will be handled by the auth context in _layout.tsx
+    } catch (err: any) {
+      console.error(err);
+      let errorMessage = "Something went wrong. Please try again.";
+      
+      if (err.code === "auth/user-not-found") {
+        errorMessage = "No account found with this email address.";
+      } else if (err.code === "auth/wrong-password") {
+        errorMessage = "Incorrect password. Please try again.";
+      } else if (err.code === "auth/invalid-email") {
+        errorMessage = "Invalid email address format.";
+      } else if (err.code === "auth/too-many-requests") {
+        errorMessage = "Too many failed attempts. Please try again later.";
+      }
+      
+      Alert.alert("Login Failed", errorMessage);
+    } finally {
+      setIsLoadingLogin(false);
+    }
+  };
 
   return (
     <LinearGradient
-      colors={['#dbeafe', '#e0e7ff', '#c7d2fe']}
+      colors={['#1f2937', '#111827', '#000000']}
       style={{ flex: 1 }}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
     >
       {/* Header Section */}
       <View className="flex-1 justify-center px-6">
-        <View className="bg-white rounded-3xl p-8 mx-2" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.15, shadowRadius: 20, elevation: 10 }}>
+        <View className="bg-gray-800 rounded-3xl p-8 mx-2" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.15, shadowRadius: 20, elevation: 10 }}>
           {/* Logo/Icon Section */}
           <View className="items-center mb-8">
             <LinearGradient
-              colors={['#3b82f6', '#8b5cf6']}
+              colors={['#374151', '#1f2937']}
               style={{
                 width: 80,
                 height: 80,
@@ -65,17 +89,17 @@ const Login = () => {
             >
               <Text className="text-white text-3xl font-bold">💰</Text>
             </LinearGradient>
-            <Text className="text-3xl font-bold text-gray-800 mb-2">Welcome Back</Text>
-            <Text className="text-gray-500 text-center">Sign in to your Revenue Tracker account</Text>
+            <Text className="text-3xl font-bold text-white mb-2">Welcome Back</Text>
+            <Text className="text-gray-300 text-center">Sign in to your Revenue Tracker account</Text>
           </View>
 
           {/* Input Fields */}
           <View className="mb-6">
             <View className="mb-4">
-              <Text className="text-gray-700 text-sm font-medium mb-2">Email Address</Text>
+              <Text className="text-gray-300 text-sm font-medium mb-2">Email Address</Text>
               <TextInput
                 placeholder="Enter your email"
-                className="bg-gray-50 border-2 border-gray-100 rounded-xl px-4 py-4 text-gray-800 text-base"
+                className="bg-gray-700 border-2 border-gray-600 rounded-xl px-4 py-4 text-white text-base"
                 placeholderTextColor="#9CA3AF"
                 value={email}
                 onChangeText={setEmail}
@@ -86,14 +110,14 @@ const Login = () => {
             </View>
             
             <View className="mb-4">
-              <Text className="text-gray-700 text-sm font-medium mb-2">Password</Text>
+              <Text className="text-gray-300 text-sm font-medium mb-2">Password</Text>
               <TextInput
                 placeholder="Enter your password"
-                className="bg-gray-50 border-2 border-gray-100 rounded-xl px-4 py-4 text-gray-800 text-base"
+                className="bg-gray-700 border-2 border-gray-600 rounded-xl px-4 py-4 text-white text-base"
                 placeholderTextColor="#9CA3AF"
                 secureTextEntry
                 value={password}
-                onChangeText={setPasword}
+                onChangeText={setPassword}
                 style={{ fontSize: 16 }}
               />
             </View>
@@ -102,11 +126,11 @@ const Login = () => {
           {/* Login Button */}
           <TouchableOpacity
             onPress={handleLogin}
-            disabled={isLodingReg}
-            style={{ borderRadius: 12, marginBottom: 16, shadowColor: '#3B82F6', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 }}
+            disabled={isLoadingLogin}
+            style={{ borderRadius: 12, marginBottom: 16, shadowColor: '#374151', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 }}
           >
             <LinearGradient
-              colors={['#3b82f6', '#8b5cf6']}
+              colors={['#374151', '#1f2937']}
               style={{
                 paddingVertical: 16,
                 borderRadius: 12,
@@ -114,7 +138,7 @@ const Login = () => {
                 alignItems: 'center'
               }}
             >
-              {isLodingReg ? (
+              {isLoadingLogin ? (
                 <ActivityIndicator color="#fff" size="small" />
               ) : (
                 <Text className="text-center text-lg font-semibold text-white">Sign In</Text>
@@ -124,16 +148,16 @@ const Login = () => {
 
           {/* Divider */}
           <View className="flex-row items-center mb-4">
-            <View className="flex-1 h-px bg-gray-200" />
-            <Text className="mx-4 text-gray-500 text-sm">or</Text>
-            <View className="flex-1 h-px bg-gray-200" />
+            <View className="flex-1 h-px bg-gray-600" />
+            <Text className="mx-4 text-gray-400 text-sm">or</Text>
+            <View className="flex-1 h-px bg-gray-600" />
           </View>
 
           {/* Register Link */}
           <Pressable onPress={() => router.push("/(auth)/register")}>
             <Text className="text-center text-base">
-              <Text className="text-gray-600">Don't have an account? </Text>
-              <Text className="text-blue-600 font-semibold">Create Account</Text>
+              <Text className="text-gray-400">Don't have an account? </Text>
+              <Text className="text-blue-400 font-semibold">Create Account</Text>
             </Text>
           </Pressable>
         </View>
@@ -141,7 +165,7 @@ const Login = () => {
 
       {/* Footer */}
       <View className="pb-8 px-6">
-        <Text className="text-center text-gray-400 text-sm">
+        <Text className="text-center text-gray-500 text-sm">
           © 2024 Revenue Tracker. All rights reserved.
         </Text>
       </View>

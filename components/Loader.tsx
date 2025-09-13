@@ -1,19 +1,19 @@
 import React from "react"
-import { View, ActivityIndicator } from "react-native"
+import { ActivityIndicator, Text, View } from "react-native"
 
 interface LoaderProps {
-  visible: boolean
+  text?: string
+  size?: "small" | "large"
 }
 
-const Loader: React.FC<LoaderProps> = ({ visible }) => {
-  if (!visible) return null
-
-  // inset-0 = top-0 + left-0 + right-0 + bottom-0
+const Loader: React.FC<LoaderProps> = ({ text = "Loading...", size = "large" }) => {
   return (
-    <View className="absolute inset-0 bg-black/50 items-center justify-center z-50">
-      <ActivityIndicator size="large" color="#fff" />
+    <View className="flex-1 justify-center items-center bg-gray-900">
+      <ActivityIndicator size={size} color="#3b82f6" />
+      <Text className="text-white mt-4 text-lg">{text}</Text>
     </View>
   )
 }
 
+export default Loader
 export default Loader

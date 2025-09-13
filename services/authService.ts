@@ -1,18 +1,18 @@
-import { auth } from "@/firebase"
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut
-} from "firebase/auth"
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { auth, saveUserToFirestore } from '../firebase';
 
-export const register = (email: string, password: string) => {
-  return createUserWithEmailAndPassword(auth, email, password)
-}
+export const register = async (email: string, password: string, name: string) => {
+  const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+  // Save additional user data to Firestore
+  await saveUserToFirestore(userCredential.user.uid, { email, name });
+  return userCredential;
+};
 
-export const login = (email: string, password: string) => {
-  return signInWithEmailAndPassword(auth, email, password)
-}
+export const login = async (email: string, password: string) => {
+  return await signInWithEmailAndPassword(auth, email, password);
+};
 
-export const logout = () => {
-  return signOut(auth)
-}
+export const logout = async () => {
+  return await signOut(auth);
+};
+
