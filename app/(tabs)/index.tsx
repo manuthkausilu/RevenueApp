@@ -8,7 +8,7 @@ import { getMonthlyExpenses, getTotalExpenses } from '../../services/expenseServ
 import { getMonthlyIncome, getTotalIncome } from '../../services/incomeService';
 
 const HomeScreen = () => {
-  const { user } = useAuth();
+  const { user, userProfile } = useAuth();
   const router = useRouter();
   const [totalIncome, setTotalIncome] = useState(0);
   const [totalExpenses, setTotalExpenses] = useState(0);
@@ -116,7 +116,7 @@ const HomeScreen = () => {
             </View>
             <Text className="text-4xl font-bold text-white mb-2 text-center">Welcome Back! 👋</Text>
             <Text className="text-blue-300 text-lg font-semibold text-center mb-2">
-              {user?.email?.split('@')[0] || 'User'}
+              {userProfile?.name || user?.displayName || user?.email?.split('@')[0] || 'User'}
             </Text>
             <Text className="text-slate-300 text-base text-center leading-6">
               Take control of your finances with ease

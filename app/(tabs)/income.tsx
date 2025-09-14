@@ -25,7 +25,9 @@ const IncomeScreen = () => {
     }
     try {
       const data = await getIncomes();
-      dispatch({ type: 'SET_INCOMES', payload: data });
+      // Ensure data is sorted by date (latest first) before dispatching
+      const sortedData = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      dispatch({ type: 'SET_INCOMES', payload: sortedData });
     } catch (error) {
       console.error('Error loading incomes:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Failed to load incomes' });
@@ -60,7 +62,9 @@ const IncomeScreen = () => {
         dispatch({ type: 'ADD_INCOME', payload: { ...incomeData, id } });
       }
       closeModal();
-      loadTotalIncome(); // Refresh total after adding/updating
+      // Reload and sort data after adding/updating
+      await loadIncomes();
+      loadTotalIncome();
     } catch (error) {
       console.error('Error saving income:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Failed to save income' });
@@ -83,7 +87,9 @@ const IncomeScreen = () => {
             try {
               await deleteIncome(id);
               dispatch({ type: 'DELETE_INCOME', payload: id });
-              loadTotalIncome(); // Refresh total after deleting
+              // Reload and sort data after deleting
+              await loadIncomes();
+              loadTotalIncome();
             } catch (error) {
               console.error('Error deleting income:', error);
               dispatch({ type: 'SET_ERROR', payload: 'Failed to delete income' });

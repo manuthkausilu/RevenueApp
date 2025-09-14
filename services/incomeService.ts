@@ -26,7 +26,7 @@ export const getIncomes = async (): Promise<Income[]> => {
   if (!user) throw new Error("User not authenticated");
   const q = query(collection(db, "incomes"), where("userId", "==", user.uid));
   const querySnapshot = await getDocs(q);
-  return querySnapshot.docs.map(doc => {
+  const incomes = querySnapshot.docs.map(doc => {
     const data = doc.data();
     return {
       id: doc.id,
@@ -35,6 +35,9 @@ export const getIncomes = async (): Promise<Income[]> => {
       date: data.date?.toDate ? data.date.toDate().toISOString().split('T')[0] : data.date,
     } as Income;
   });
+  
+  // Sort by date (latest first)
+  return incomes.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 };
 
 // Update: Update an existing income entry

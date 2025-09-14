@@ -25,7 +25,9 @@ const ExpensesScreen = () => {
     }
     try {
       const data = await getExpenses();
-      dispatch({ type: 'SET_EXPENSES', payload: data });
+      // Ensure data is sorted by date (latest first) before dispatching
+      const sortedData = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      dispatch({ type: 'SET_EXPENSES', payload: sortedData });
     } catch (error) {
       console.error('Error loading expenses:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Failed to load expenses' });
@@ -60,7 +62,9 @@ const ExpensesScreen = () => {
         dispatch({ type: 'ADD_EXPENSE', payload: { ...expenseData, id: docRef.id } });
       }
       closeModal();
-      loadTotalExpenses(); // Refresh total after adding/updating
+      // Reload and sort data after adding/updating
+      await loadExpenses();
+      loadTotalExpenses();
     } catch (error) {
       console.error('Error saving expense:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Failed to save expense' });
@@ -83,7 +87,9 @@ const ExpensesScreen = () => {
             try {
               await deleteExpense(id);
               dispatch({ type: 'DELETE_EXPENSE', payload: id });
-              loadTotalExpenses(); // Refresh total after deleting
+              // Reload and sort data after deleting
+              await loadExpenses();
+              loadTotalExpenses();
             } catch (error) {
               console.error('Error deleting expense:', error);
               dispatch({ type: 'SET_ERROR', payload: 'Failed to delete expense' });
