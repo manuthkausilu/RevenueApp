@@ -58,3 +58,13 @@ export const getTotalIncome = async (): Promise<number> => {
   const incomes = await getIncomes();
   return incomes.reduce((total, income) => total + income.amount, 0);
 };
+
+// Get monthly income
+export const getMonthlyIncome = async (month: number, year: number): Promise<number> => {
+  const incomes = await getIncomes();
+  const monthlyIncomes = incomes.filter(income => {
+    const incomeDate = new Date(income.date);
+    return incomeDate.getMonth() === month && incomeDate.getFullYear() === year;
+  });
+  return monthlyIncomes.reduce((total, income) => total + income.amount, 0);
+};

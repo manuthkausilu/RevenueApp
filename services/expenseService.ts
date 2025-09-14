@@ -57,3 +57,13 @@ export const getTotalExpenses = async (): Promise<number> => {
   const expenses = await getExpenses();
   return expenses.reduce((total, expense) => total + expense.amount, 0);
 };
+
+// Get monthly expenses
+export const getMonthlyExpenses = async (month: number, year: number): Promise<number> => {
+  const expenses = await getExpenses();
+  const monthlyExpenses = expenses.filter(expense => {
+    const expenseDate = new Date(expense.date);
+    return expenseDate.getMonth() === month && expenseDate.getFullYear() === year;
+  });
+  return monthlyExpenses.reduce((total, expense) => total + expense.amount, 0);
+};

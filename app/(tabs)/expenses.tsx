@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, FlatList, RefreshControl, Text, TouchableOpacity, View } from 'react-native';
 import ExpenseForm from '../../components/ExpenseForm';
 import { useExpense } from '../../context/ExpensesContext';
 import { addExpense, deleteExpense, Expense, getExpenses, getTotalExpenses, updateExpense } from '../../services/expenseService';
@@ -67,15 +67,32 @@ const ExpensesScreen = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    try {
-      await deleteExpense(id);
-      dispatch({ type: 'DELETE_EXPENSE', payload: id });
-      loadTotalExpenses(); // Refresh total after deleting
-    } catch (error) {
-      console.error('Error deleting expense:', error);
-      dispatch({ type: 'SET_ERROR', payload: 'Failed to delete expense' });
-    }
+  const handleDelete = async (id: string, description: string) => {
+    Alert.alert(
+      'Delete Expense',
+      `Are you sure you want to delete "${description}"? This action cannot be undone.`,
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await deleteExpense(id);
+              dispatch({ type: 'DELETE_EXPENSE', payload: id });
+              loadTotalExpenses(); // Refresh total after deleting
+            } catch (error) {
+              console.error('Error deleting expense:', error);
+              dispatch({ type: 'SET_ERROR', payload: 'Failed to delete expense' });
+            }
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const openModal = (expense?: Expense) => {
@@ -156,7 +173,7 @@ const ExpensesScreen = () => {
             <Text className="text-white/75 text-sm text-center">All time spending</Text>
           </View>
           <View className="items-center">
-            <Text className="text-white text-5xl font-bold mb-4 text-center">
+            <Text className="text-white text-3xl font-bold mb-4 text-center">
               LKR {totalExpenses.toLocaleString()}
             </Text>
             <View className="flex-row items-center justify-center">
@@ -173,10 +190,12 @@ const ExpensesScreen = () => {
 
       {/* Enhanced Statistics Grid */}
       <View className="mb-8">
-        <Text className="text-white text-xl font-bold mb-4">This Month</Text>
-        <View className="flex-row space-x-3 mb-4">
+        <Text className="text-white text-xl font-bold mb-6 text-center">This Month</Text>
+        
+        {/* Monthly Total Card */}
+        <View className="mb-4 mx-6">
           <View 
-            className="bg-slate-800/70 backdrop-blur-sm rounded-3xl p-6 flex-1 border border-slate-700/40"
+            className="bg-slate-800/70 backdrop-blur-sm rounded-3xl p-6 border border-slate-700/40"
             style={{
               borderRadius: 24,
               shadowColor: '#DC2626',
@@ -195,39 +214,11 @@ const ExpensesScreen = () => {
               </View>
             </View>
             <View className="items-center">
-              <Text className="text-white text-2xl font-bold text-center">
+              <Text className="text-white text-xl font-bold text-center">
                 LKR {thisMonthTotal.toLocaleString()}
               </Text>
               <Text className="text-red-400 text-sm mt-2 text-center">
                 {thisMonthExpenses.length} entries
-              </Text>
-            </View>
-          </View>
-          <View 
-            className="bg-slate-800/70 backdrop-blur-sm rounded-3xl p-6 flex-1 border border-slate-700/40"
-            style={{
-              borderRadius: 24,
-              shadowColor: '#3B82F6',
-              shadowOffset: { width: 0, height: 6 },
-              shadowOpacity: 0.2,
-              shadowRadius: 12,
-              elevation: 8,
-            }}
-          >
-            <View className="items-center mb-3">
-              <View className="flex-row items-center justify-center mb-2">
-                <View className="bg-blue-500/20 p-2 rounded-xl mr-2">
-                  <Ionicons name="stats-chart" size={20} color="#3B82F6" />
-                </View>
-                <Text className="text-slate-300 text-sm font-semibold">Average</Text>
-              </View>
-            </View>
-            <View className="items-center">
-              <Text className="text-white text-2xl font-bold text-center">
-                LKR {averageExpense.toFixed(0)}
-              </Text>
-              <Text className="text-blue-400 text-sm mt-2 text-center">
-                per entry
               </Text>
             </View>
           </View>
@@ -298,12 +289,12 @@ const ExpensesScreen = () => {
           elevation: 4,
         }}
       >
-        <View className="flex-row items-center justify-between mb-2">
-          <View className="flex-row items-center flex-1 mr-3">
-            <View className="bg-red-500/20 p-2.5 rounded-xl mr-3">
-              <Ionicons name="trending-down" size={18} color="#EF4444" />
+        <View className="flex-row items-center justify-between">
+          <View className="flex-row items-center flex-1">
+            <View className="bg-red-500/20 p-3 rounded-xl mr-3">
+              <Ionicons name="trending-down" size={22} color="#EF4444" />
             </View>
-            <View className="flex-1">
+            <View className="flex-1 mr-3">
               <Text className="text-white font-bold text-sm" numberOfLines={1} ellipsizeMode="tail">
                 {truncateDescription(item.description, 20)}
               </Text>
@@ -312,25 +303,62 @@ const ExpensesScreen = () => {
               </Text>
             </View>
           </View>
+          
           <View className="flex-row items-center">
             <TouchableOpacity 
               onPress={() => openModal(item)}
-              className="bg-blue-500/20 p-1.5 rounded-lg mr-1.5"
+              className="bg-blue-500/20 p-2 rounded-lg mr-2"
             >
-              <Ionicons name="pencil" size={14} color="#60A5FA" />
+              <Ionicons name="pencil" size={16} color="#60A5FA" />
             </TouchableOpacity>
             <TouchableOpacity 
-              onPress={() => handleDelete(item.id!)}
-              className="bg-red-500/20 p-1.5 rounded-lg"
+              onPress={() => handleDelete(item.id!, item.description)}
+              className="bg-red-500/20 p-2 rounded-lg"
             >
-              <Ionicons name="trash" size={14} color="#EF4444" />
+              <Ionicons name="trash" size={16} color="#EF4444" />
             </TouchableOpacity>
           </View>
         </View>
-        <View className="items-end">
-          <Text className="text-red-400 font-bold text-lg">
-            -LKR {item.amount.toLocaleString()}
-          </Text>
+        
+        <View className="flex-row items-center justify-end mt-3 pt-3 border-t border-slate-600/30">
+          <View 
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              backgroundColor: 'rgba(239, 68, 68, 0.1)',
+              paddingHorizontal: 12,
+              paddingVertical: 6,
+              borderRadius: 12,
+            }}
+          >
+            <View 
+              style={{
+                width: 24,
+                height: 24,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: 6,
+                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                borderRadius: 6,
+              }}
+            >
+              <Ionicons 
+                name="remove" 
+                size={16} 
+                color="#EF4444"
+              />
+            </View>
+            <Text 
+              style={{
+                color: '#EF4444',
+                fontSize: 16,
+                fontWeight: 'bold',
+                letterSpacing: 0.3,
+              }}
+            >
+              LKR {item.amount.toLocaleString()}
+            </Text>
+          </View>
         </View>
       </View>
     );
@@ -365,30 +393,70 @@ const ExpensesScreen = () => {
         showsVerticalScrollIndicator={false}
       />
 
-      {/* Enhanced Floating Action Button */}
-      <TouchableOpacity 
-        onPress={() => openModal()} 
+      {/* Modern Floating Action Button */}
+      <View 
         className="absolute bottom-20 right-5"
         style={{
           shadowColor: '#EF4444',
           shadowOffset: { width: 0, height: 12 },
-          shadowOpacity: 0.5,
-          shadowRadius: 20,
+          shadowOpacity: 0.3,
+          shadowRadius: 16,
           elevation: 15,
         }}
       >
-        <LinearGradient
-          colors={['#DC2626', '#EF4444']}
-          className="p-6 rounded-3xl"
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
+        <TouchableOpacity 
+          onPress={() => openModal()}
           style={{
-            borderRadius: 24,
+            backgroundColor: '#EF4444',
+            borderRadius: 20,
+            padding: 12,
+            alignItems: 'center',
+            justifyContent: 'center',
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
-          <Ionicons name="add" size={28} color="#fff" />
-        </LinearGradient>
-      </TouchableOpacity>
+          {/* Glassmorphism overlay */}
+          <View style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: 20,
+          }} />
+          
+          {/* Animated pulse effect */}
+          <View style={{
+            position: 'absolute',
+            top: -8,
+            left: -8,
+            right: -8,
+            bottom: -8,
+            backgroundColor: 'rgba(239, 68, 68, 0.3)',
+            borderRadius: 28,
+            opacity: 0.6,
+          }} />
+          
+          <View style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1,
+          }}>
+            <Ionicons name="add" size={20} color="white" style={{ marginRight: 4 }} />
+            <Text style={{
+              color: 'white',
+              fontSize: 12,
+              fontWeight: '700',
+              letterSpacing: 0.5,
+            }}>
+              Expense
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
 
       <ExpenseForm
         visible={modalVisible}
