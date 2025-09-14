@@ -6,6 +6,7 @@ export interface Expense {
   amount: number;
   description: string;
   date: string;
+  userId?: string;
 }
 
 const expenseCollection = collection(db, 'expenses');
