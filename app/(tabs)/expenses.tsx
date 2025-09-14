@@ -115,28 +115,30 @@ const ExpensesScreen = () => {
         <View className="p-5 pt-16">
           {/* Enhanced Header */}
           <View className="mb-8">
-            <View className="flex-row items-center justify-between mb-2">
-              <Text className="text-4xl font-bold text-white">Expenses 📊</Text>
-              <TouchableOpacity 
-                onPress={loadTotalExpenses} 
-                disabled={loadingTotal}
-                className="bg-red-500/20 p-3 rounded-2xl"
-                style={{
-                  shadowColor: '#EF4444',
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 10,
-                  elevation: 6,
-                }}
-              >
-                {loadingTotal ? (
-                  <ActivityIndicator size="small" color="#EF4444" />
-                ) : (
-                  <Ionicons name="refresh" size={20} color="#EF4444" />
-                )}
-              </TouchableOpacity>
+            <View 
+              className="bg-gradient-to-r from-red-600/20 to-pink-600/20 p-6 rounded-3xl border border-red-500/30"
+              style={{
+                borderRadius: 24,
+                shadowColor: '#EF4444',
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.3,
+                shadowRadius: 16,
+                elevation: 12,
+              }}
+            >
+              <View className="items-center">
+                <View className="bg-red-500/20 p-4 rounded-2xl mb-4">
+                  <Ionicons name="receipt" size={40} color="#EF4444" />
+                </View>
+                <Text className="text-4xl font-bold text-white mb-2 text-center">Expenses 📊</Text>
+                <Text className="text-red-300 text-lg font-semibold text-center mb-2">
+                  Spending Control
+                </Text>
+                <Text className="text-slate-300 text-base text-center leading-6">
+                  Monitor and control your spending patterns effectively
+                </Text>
+              </View>
             </View>
-            <Text className="text-slate-300 text-lg">Monitor and control your spending patterns</Text>
           </View>
 
           {/* Main Total Card */}

@@ -115,28 +115,30 @@ const IncomeScreen = () => {
         <View className="p-5 pt-16">
           {/* Enhanced Header */}
           <View className="mb-8">
-            <View className="flex-row items-center justify-between mb-2">
-              <Text className="text-4xl font-bold text-white">Income 💰</Text>
-              <TouchableOpacity 
-                onPress={loadTotalIncome} 
-                disabled={loadingTotal}
-                className="bg-green-500/20 p-3 rounded-2xl"
-                style={{
-                  shadowColor: '#10B981',
-                  shadowOffset: { width: 0, height: 4 },
-                  shadowOpacity: 0.3,
-                  shadowRadius: 10,
-                  elevation: 6,
-                }}
-              >
-                {loadingTotal ? (
-                  <ActivityIndicator size="small" color="#10B981" />
-                ) : (
-                  <Ionicons name="refresh" size={20} color="#10B981" />
-                )}
-              </TouchableOpacity>
+            <View 
+              className="bg-gradient-to-r from-green-600/20 to-emerald-600/20 p-6 rounded-3xl border border-green-500/30"
+              style={{
+                borderRadius: 24,
+                shadowColor: '#10B981',
+                shadowOffset: { width: 0, height: 8 },
+                shadowOpacity: 0.3,
+                shadowRadius: 16,
+                elevation: 12,
+              }}
+            >
+              <View className="items-center">
+                <View className="bg-green-500/20 p-4 rounded-2xl mb-4">
+                  <Ionicons name="wallet" size={40} color="#10B981" />
+                </View>
+                <Text className="text-4xl font-bold text-white mb-2 text-center">Income 💰</Text>
+                <Text className="text-green-300 text-lg font-semibold text-center mb-2">
+                  Revenue Management
+                </Text>
+                <Text className="text-slate-300 text-base text-center leading-6">
+                  Track and manage your revenue streams with ease
+                </Text>
+              </View>
             </View>
-            <Text className="text-slate-300 text-lg">Track and manage your revenue streams</Text>
           </View>
 
           {/* Main Total Card */}
