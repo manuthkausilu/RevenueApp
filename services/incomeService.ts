@@ -36,8 +36,20 @@ export const getIncomes = async (): Promise<Income[]> => {
     } as Income;
   });
   
+  // Debug: Log dates before sorting
+  console.log('Income dates before sorting:', incomes.map(i => ({ desc: i.description, date: i.date })));
+  
   // Sort by date (latest first)
-  return incomes.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sortedIncomes = incomes.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    console.log(`Comparing: ${a.date} (${dateA.getTime()}) vs ${b.date} (${dateB.getTime()})`);
+    return dateB.getTime() - dateA.getTime();
+  });
+  
+  console.log('Income dates after sorting:', sortedIncomes.map(i => ({ desc: i.description, date: i.date })));
+  
+  return sortedIncomes;
 };
 
 // Update: Update an existing income entry

@@ -16,4 +16,3 @@ const Loader: React.FC<LoaderProps> = ({ text = "Loading...", size = "large" }) 
 }
 
 export default Loader
-export default Loader

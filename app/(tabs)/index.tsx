@@ -18,10 +18,21 @@ const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    loadFinancialData();
-  }, []);
+    // Only load data if user is authenticated
+    if (user) {
+      loadFinancialData();
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
 
   const loadFinancialData = async () => {
+    // Double check user authentication
+    if (!user) {
+      setLoading(false);
+      return;
+    }
+
     try {
       if (!refreshing) setLoading(true);
       
@@ -47,6 +58,8 @@ const HomeScreen = () => {
   };
 
   const onRefresh = async () => {
+    if (!user) return;
+    
     setRefreshing(true);
     await loadFinancialData();
     setRefreshing(false);

@@ -15,8 +15,13 @@ const ExpensesScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    loadExpenses();
-    loadTotalExpenses();
+    // Add a small delay to ensure auth state is established
+    const timer = setTimeout(() => {
+      loadExpenses();
+      loadTotalExpenses();
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const loadExpenses = async () => {
@@ -25,9 +30,8 @@ const ExpensesScreen = () => {
     }
     try {
       const data = await getExpenses();
-      // Ensure data is sorted by date (latest first) before dispatching
-      const sortedData = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      dispatch({ type: 'SET_EXPENSES', payload: sortedData });
+      console.log('Loaded expense data:', data.map(e => ({ desc: e.description, date: e.date })));
+      dispatch({ type: 'SET_EXPENSES', payload: data });
     } catch (error) {
       console.error('Error loading expenses:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Failed to load expenses' });

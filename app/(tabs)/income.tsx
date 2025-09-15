@@ -15,8 +15,13 @@ const IncomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
-    loadIncomes();
-    loadTotalIncome();
+    // Add a small delay to ensure auth state is established
+    const timer = setTimeout(() => {
+      loadIncomes();
+      loadTotalIncome();
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const loadIncomes = async () => {
@@ -25,9 +30,8 @@ const IncomeScreen = () => {
     }
     try {
       const data = await getIncomes();
-      // Ensure data is sorted by date (latest first) before dispatching
-      const sortedData = data.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-      dispatch({ type: 'SET_INCOMES', payload: sortedData });
+      console.log('Loaded income data:', data.map(i => ({ desc: i.description, date: i.date })));
+      dispatch({ type: 'SET_INCOMES', payload: data });
     } catch (error) {
       console.error('Error loading incomes:', error);
       dispatch({ type: 'SET_ERROR', payload: 'Failed to load incomes' });

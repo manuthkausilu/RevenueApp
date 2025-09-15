@@ -2,6 +2,8 @@ import { Slot, useRouter, useSegments } from "expo-router"
 import React, { useEffect } from "react"
 import { ActivityIndicator, View } from "react-native"
 import { AuthProvider, useAuth } from "../context/AuthContext"
+import { ExpenseProvider } from "../context/ExpensesContext"
+import { IncomeProvider } from "../context/IncomeContext"
 import { LoaderProvider } from "../context/LoaderContext"
 import "./../global.css"
 
@@ -14,6 +16,7 @@ const InitialLayout = () => {
     // Wait until auth state is loaded
     if (loading) return
 
+    const inAuthGroup = segments[0] === "(auth)" || segments[0] === "login" || segments[0] === "register"
     const inTabsGroup = segments[0] === "(tabs)"
 
     // If user is logged in, redirect to dashboard (tabs index)
@@ -42,7 +45,11 @@ const RootLayout = () => {
   return (
     <LoaderProvider>
       <AuthProvider>
-        <InitialLayout />
+        <IncomeProvider>
+          <ExpenseProvider>
+            <InitialLayout />
+          </ExpenseProvider>
+        </IncomeProvider>
       </AuthProvider>
     </LoaderProvider>
   )

@@ -35,8 +35,20 @@ export const getExpenses = async (): Promise<Expense[]> => {
     } as Expense;
   });
   
+  // Debug: Log dates before sorting
+  console.log('Expense dates before sorting:', expenses.map(e => ({ desc: e.description, date: e.date })));
+  
   // Sort by date (latest first)
-  return expenses.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  const sortedExpenses = expenses.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    console.log(`Comparing: ${a.date} (${dateA.getTime()}) vs ${b.date} (${dateB.getTime()})`);
+    return dateB.getTime() - dateA.getTime();
+  });
+  
+  console.log('Expense dates after sorting:', sortedExpenses.map(e => ({ desc: e.description, date: e.date })));
+  
+  return sortedExpenses;
 };
 
 // Update: Update an existing expense entry
