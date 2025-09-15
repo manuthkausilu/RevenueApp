@@ -72,14 +72,14 @@ const HomeScreen = () => {
   const monthlyProfit = monthlyIncome - monthlyExpenses;
   const monthlyProfitMargin = monthlyIncome > 0 ? ((monthlyProfit / monthlyIncome) * 100) : 0;
 
-  // Dashboard items following Income screen pattern
+  // Dashboard items - all using new blue color
   const dashboardItems = [
     {
       id: 'quick-add-income',
       title: 'Add Income',
       subtitle: 'Record new revenue',
       icon: 'add-circle',
-      color: '#10B981',
+      color: '#2563EB',
       onPress: () => router.push('/(tabs)/income')
     },
     {
@@ -87,7 +87,7 @@ const HomeScreen = () => {
       title: 'Add Expense',
       subtitle: 'Track new spending',
       icon: 'remove-circle',
-      color: '#EF4444',
+      color: '#2563EB',
       onPress: () => router.push('/(tabs)/expenses')
     },
     {
@@ -95,7 +95,7 @@ const HomeScreen = () => {
       title: 'View Income',
       subtitle: `LKR ${totalIncome.toLocaleString()}`,
       icon: 'trending-up',
-      color: '#10B981',
+      color: '#2563EB',
       onPress: () => router.push('/(tabs)/income')
     },
     {
@@ -103,7 +103,7 @@ const HomeScreen = () => {
       title: 'View Expenses',
       subtitle: `LKR ${totalExpenses.toLocaleString()}`,
       icon: 'trending-down',
-      color: '#EF4444',
+      color: '#2563EB',
       onPress: () => router.push('/(tabs)/expenses')
     }
   ];
@@ -113,25 +113,27 @@ const HomeScreen = () => {
       {/* Enhanced Header */}
       <View className="mb-8">
         <View 
-          className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 p-6 rounded-3xl border border-blue-500/30"
+          className="bg-blue-50 p-6 rounded-3xl border border-blue-200"
           style={{
             borderRadius: 24,
-            shadowColor: '#3B82F6',
+            shadowColor: '#2563EB',
             shadowOffset: { width: 0, height: 8 },
-            shadowOpacity: 0.3,
+            shadowOpacity: 0.1,
             shadowRadius: 16,
-            elevation: 12,
+            elevation: 8,
           }}
         >
           <View className="items-center">
-            <View className="bg-blue-500/20 p-4 rounded-2xl mb-4">
-              <Ionicons name="person-circle" size={40} color="#60A5FA" />
-            </View>
-            <Text className="text-4xl font-bold text-white mb-2 text-center">Welcome Back! 👋</Text>
-            <Text className="text-blue-300 text-lg font-semibold text-center mb-2">
+            {/* App name / brand */}
+            <Text style={{ color: '#2563EB', fontSize: 18, fontWeight: '800', marginBottom: 6 }}>
+              BIZTRACK
+            </Text>
+
+            <Text className="text-4xl font-bold text-black mb-2 text-center">Welcome Back! 👋</Text>
+            <Text className="text-blue-600 text-lg font-semibold text-center mb-2">
               {userProfile?.name || user?.displayName || user?.email?.split('@')[0] || 'User'}
             </Text>
-            <Text className="text-slate-300 text-base text-center leading-6">
+            <Text className="text-gray-600 text-base text-center leading-6">
               Take control of your finances with ease
             </Text>
           </View>
@@ -141,18 +143,15 @@ const HomeScreen = () => {
       {/* Main Total Card */}
       <View className="mb-6">
         <LinearGradient
-          colors={netProfit >= 0 
-            ? ['#1E40AF', '#3B82F6', '#60A5FA'] 
-            : ['#D97706', '#F59E0B', '#FCD34D']
-          }
+          colors={['#2563EB', '#3B82F6', '#60A5FA']}
           className="p-7 rounded-3xl"
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{
             borderRadius: 32,
-            shadowColor: netProfit >= 0 ? '#3B82F6' : '#F59E0B',
+            shadowColor: '#2563EB',
             shadowOffset: { width: 0, height: 12 },
-            shadowOpacity: 0.4,
+            shadowOpacity: 0.2,
             shadowRadius: 24,
             elevation: 15,
           }}
@@ -161,7 +160,7 @@ const HomeScreen = () => {
             <View className="flex-row items-center justify-between w-full mb-4">
               <View className="bg-white/30 p-5 rounded-3xl shadow-lg">
                 <Ionicons 
-                  name={netProfit >= 0 ? "analytics" : "warning"} 
+                  name="analytics" 
                   size={36} 
                   color="#ffffff" 
                 />
@@ -199,38 +198,38 @@ const HomeScreen = () => {
 
       {/* Enhanced Statistics Grid */}
       <View className="mb-8">
-        <Text className="text-white text-xl font-bold mb-6 text-center">Financial Overview</Text>
+        <Text className="text-black text-xl font-bold mb-6 text-center">Financial Overview</Text>
         
         {/* Monthly Profit Card */}
         <View className="mb-4 mx-6">
           <View 
-            className="bg-slate-800/70 backdrop-blur-sm rounded-3xl p-6 border border-slate-700/40"
+            className="bg-white rounded-3xl p-6 border border-gray-200"
             style={{
               borderRadius: 24,
-              shadowColor: monthlyProfit >= 0 ? '#3B82F6' : '#F59E0B',
+              shadowColor: '#000000',
               shadowOffset: { width: 0, height: 6 },
-              shadowOpacity: 0.2,
+              shadowOpacity: 0.1,
               shadowRadius: 12,
               elevation: 8,
             }}
           >
             <View className="items-center mb-3">
               <View className="flex-row items-center justify-center mb-2">
-                <View className={`${monthlyProfit >= 0 ? 'bg-blue-500/20' : 'bg-yellow-500/20'} p-2 rounded-xl mr-2`}>
+                <View className="bg-blue-100 p-2 rounded-xl mr-2">
                   <Ionicons 
-                    name={monthlyProfit >= 0 ? "analytics" : "warning"} 
+                    name="analytics" 
                     size={20} 
-                    color={monthlyProfit >= 0 ? "#3B82F6" : "#F59E0B"} 
+                    color="#2563EB" 
                   />
                 </View>
-                <Text className="text-slate-300 text-sm font-semibold">Monthly Profit</Text>
+                <Text className="text-gray-700 text-sm font-semibold">Monthly Profit</Text>
               </View>
             </View>
             <View className="items-center">
-              <Text className="text-white text-xl font-bold text-center">
+              <Text className="text-black text-xl font-bold text-center">
                 LKR {Math.abs(monthlyProfit).toLocaleString()}
               </Text>
-              <Text className={`${monthlyProfit >= 0 ? 'text-blue-400' : 'text-yellow-400'} text-sm mt-2 text-center`}>
+              <Text className="text-blue-600 text-sm mt-2 text-center">
                 {monthlyProfit >= 0 ? 'This month profit' : 'This month loss'} • {monthlyProfitMargin.toFixed(1)}% margin
               </Text>
             </View>
@@ -242,27 +241,27 @@ const HomeScreen = () => {
           <TouchableOpacity 
             onPress={() => router.push('/(tabs)/income')}
             style={{
-              shadowColor: '#059669',
+              shadowColor: '#000000',
               shadowOffset: { width: 0, height: 6 },
-              shadowOpacity: 0.2,
+              shadowOpacity: 0.1,
               shadowRadius: 12,
               elevation: 8,
             }}
           >
-            <View className="bg-slate-800/70 backdrop-blur-sm rounded-3xl p-6 border border-slate-700/40">
+            <View className="bg-white rounded-3xl p-6 border border-gray-200">
               <View className="items-center mb-3">
                 <View className="flex-row items-center justify-center mb-2">
-                  <View className="bg-green-500/20 p-2 rounded-xl mr-2">
-                    <Ionicons name="trending-up" size={20} color="#10B981" />
+                  <View className="bg-blue-100 p-2 rounded-xl mr-2">
+                    <Ionicons name="trending-up" size={20} color="#2563EB" />
                   </View>
-                  <Text className="text-slate-300 text-sm font-semibold">Total Income</Text>
+                  <Text className="text-gray-700 text-sm font-semibold">Total Income</Text>
                 </View>
               </View>
               <View className="items-center">
-                <Text className="text-white text-xl font-bold text-center">
+                <Text className="text-black text-xl font-bold text-center">
                   LKR {totalIncome.toLocaleString()}
                 </Text>
-                <Text className="text-green-400 text-sm mt-2 text-center">
+                <Text className="text-blue-600 text-sm mt-2 text-center">
                   All time earnings
                 </Text>
               </View>
@@ -275,27 +274,27 @@ const HomeScreen = () => {
           <TouchableOpacity 
             onPress={() => router.push('/(tabs)/expenses')}
             style={{
-              shadowColor: '#DC2626',
+              shadowColor: '#000000',
               shadowOffset: { width: 0, height: 6 },
-              shadowOpacity: 0.2,
+              shadowOpacity: 0.1,
               shadowRadius: 12,
               elevation: 8,
             }}
           >
-            <View className="bg-slate-800/70 backdrop-blur-sm rounded-3xl p-6 border border-slate-700/40">
+            <View className="bg-white rounded-3xl p-6 border border-gray-200">
               <View className="items-center mb-3">
                 <View className="flex-row items-center justify-center mb-2">
-                  <View className="bg-red-500/20 p-2 rounded-xl mr-2">
-                    <Ionicons name="trending-down" size={20} color="#EF4444" />
+                  <View className="bg-blue-100 p-2 rounded-xl mr-2">
+                    <Ionicons name="trending-down" size={20} color="#2563EB" />
                   </View>
-                  <Text className="text-slate-300 text-sm font-semibold">Total Expenses</Text>
+                  <Text className="text-gray-700 text-sm font-semibold">Total Expenses</Text>
                 </View>
               </View>
               <View className="items-center">
-                <Text className="text-white text-xl font-bold text-center">
+                <Text className="text-black text-xl font-bold text-center">
                   LKR {totalExpenses.toLocaleString()}
                 </Text>
-                <Text className="text-red-400 text-sm mt-2 text-center">
+                <Text className="text-blue-600 text-sm mt-2 text-center">
                   All time spending
                 </Text>
               </View>
@@ -306,9 +305,9 @@ const HomeScreen = () => {
 
       {/* Dashboard List Header */}
       <View className="flex-row items-center justify-between mb-6">
-        <Text className="text-white text-xl font-bold">Quick Actions</Text>
-        <View className="bg-slate-700/60 px-4 py-2 rounded-2xl">
-          <Text className="text-slate-300 text-sm font-semibold">
+        <Text className="text-black text-xl font-bold">Quick Actions</Text>
+        <View className="bg-gray-100 px-4 py-2 rounded-2xl">
+          <Text className="text-gray-600 text-sm font-semibold">
             Dashboard
           </Text>
         </View>
@@ -318,35 +317,38 @@ const HomeScreen = () => {
 
   const renderEmptyState = () => (
     <View 
-      className="bg-slate-800/50 rounded-3xl p-12 items-center border border-slate-700/40 mx-5"
+      className="bg-white rounded-3xl p-12 items-center border border-gray-200 mx-5"
       style={{
         borderRadius: 28,
-        shadowColor: '#1E293B',
+        shadowColor: '#000000',
         shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
+        shadowOpacity: 0.1,
         shadowRadius: 16,
         elevation: 10,
       }}
     >
-      <View className="bg-blue-500/25 p-8 rounded-3xl mb-6 shadow-lg">
-        <Ionicons name="analytics" size={48} color="#60A5FA" />
+      <View className="bg-blue-100 p-8 rounded-3xl mb-6">
+        <Ionicons name="analytics" size={48} color="#2563EB" />
       </View>
-      <Text className="text-slate-300 text-xl font-bold mb-3">Welcome to Your Dashboard</Text>
-      <Text className="text-slate-500 text-center text-base leading-6 mb-6">
+      <Text className="text-black text-xl font-bold mb-3">Welcome to Your Dashboard</Text>
+      <Text className="text-gray-600 text-center text-base leading-6 mb-6">
         Start by adding your first income or expense to see your financial overview
       </Text>
       <TouchableOpacity 
         onPress={() => router.push('/(tabs)/income')}
-        className="bg-blue-600 px-8 py-4 rounded-2xl"
         style={{
-          shadowColor: '#3B82F6',
+          backgroundColor: '#2563EB',
+          paddingHorizontal: 32,
+          paddingVertical: 16,
+          borderRadius: 16,
+          shadowColor: '#2563EB',
           shadowOffset: { width: 0, height: 6 },
           shadowOpacity: 0.3,
           shadowRadius: 12,
           elevation: 8,
         }}
       >
-        <Text className="text-white font-bold text-base">Get Started</Text>
+        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Get Started</Text>
       </TouchableOpacity>
     </View>
   );
@@ -355,12 +357,12 @@ const HomeScreen = () => {
     return (
       <TouchableOpacity 
         onPress={item.onPress}
-        className="bg-slate-800/50 rounded-3xl p-4 mb-3 mx-4 border border-slate-700/40"
+        className="bg-white rounded-3xl p-4 mb-3 mx-4 border border-gray-200"
         style={{
           borderRadius: 16,
-          shadowColor: '#1E293B',
+          shadowColor: '#000000',
           shadowOffset: { width: 0, height: 3 },
-          shadowOpacity: 0.15,
+          shadowOpacity: 0.1,
           shadowRadius: 6,
           elevation: 4,
         }}
@@ -369,22 +371,22 @@ const HomeScreen = () => {
           <View className="flex-row items-center flex-1">
             <View 
               className="p-3 rounded-xl mr-3"
-              style={{ backgroundColor: `${item.color}33` }}
+              style={{ backgroundColor: `${item.color}20` }}
             >
               <Ionicons name={item.icon} size={22} color={item.color} />
             </View>
             <View className="flex-1 mr-3">
-              <Text className="text-white font-bold text-sm">
+              <Text className="text-black font-bold text-sm">
                 {item.title}
               </Text>
-              <Text className="text-slate-400 text-xs">
+              <Text className="text-gray-600 text-xs">
                 {item.subtitle}
               </Text>
             </View>
           </View>
           
           <View className="flex-row items-center">
-            <Ionicons name="chevron-forward" size={20} color="rgba(255, 255, 255, 0.4)" />
+            <Ionicons name="chevron-forward" size={20} color="#9CA3AF" />
           </View>
         </View>
       </TouchableOpacity>
@@ -392,7 +394,7 @@ const HomeScreen = () => {
   };
 
   return (
-    <LinearGradient colors={['#0F172A', '#1E293B', '#334155']} style={{ flex: 1 }}>
+    <LinearGradient colors={['#FFFFFF', '#F8FAFC', '#E2E8F0']} style={{ flex: 1 }}>
       <FlatList
         data={dashboardItems}
         renderItem={renderDashboardItem}
@@ -400,8 +402,8 @@ const HomeScreen = () => {
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={loading ? (
           <View className="flex-1 justify-center items-center py-20">
-            <ActivityIndicator size="large" color="#60A5FA" />
-            <Text className="text-slate-400 mt-6 text-lg">Loading dashboard...</Text>
+            <ActivityIndicator size="large" color="#2563EB" />
+            <Text className="text-gray-600 mt-6 text-lg">Loading dashboard...</Text>
           </View>
         ) : renderEmptyState}
         contentContainerStyle={{ 
@@ -413,8 +415,8 @@ const HomeScreen = () => {
           <RefreshControl 
             refreshing={refreshing} 
             onRefresh={onRefresh}
-            tintColor="#60A5FA"
-            colors={['#60A5FA']}
+            tintColor="#2563EB"
+            colors={['#2563EB']}
           />
         }
         showsVerticalScrollIndicator={false}

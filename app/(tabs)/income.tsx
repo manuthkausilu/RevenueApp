@@ -30,7 +30,6 @@ const IncomeScreen = () => {
     }
     try {
       const data = await getIncomes();
-      console.log('Loaded income data:', data.map(i => ({ desc: i.description, date: i.date })));
       dispatch({ type: 'SET_INCOMES', payload: data });
     } catch (error) {
       console.error('Error loading incomes:', error);
@@ -129,25 +128,25 @@ const IncomeScreen = () => {
       {/* Enhanced Header */}
       <View className="mb-8">
         <View 
-          className="bg-gradient-to-r from-green-600/20 to-emerald-600/20 p-6 rounded-3xl border border-green-500/30"
+          className="bg-blue-50 p-6 rounded-3xl border border-blue-200"
           style={{
             borderRadius: 24,
-            shadowColor: '#10B981',
+            shadowColor: '#2563EB',
             shadowOffset: { width: 0, height: 8 },
-            shadowOpacity: 0.3,
+            shadowOpacity: 0.1,
             shadowRadius: 16,
             elevation: 12,
           }}
         >
           <View className="items-center">
-            <View className="bg-green-500/20 p-4 rounded-2xl mb-4">
-              <Ionicons name="wallet" size={40} color="#10B981" />
+            <View className="bg-blue-100 p-4 rounded-2xl mb-4">
+              <Ionicons name="wallet" size={40} color="#2563EB" />
             </View>
-            <Text className="text-4xl font-bold text-white mb-2 text-center">Income 💰</Text>
-            <Text className="text-green-300 text-lg font-semibold text-center mb-2">
+            <Text className="text-4xl font-bold text-black mb-2 text-center">Income</Text>
+            <Text className="text-blue-600 text-lg font-semibold text-center mb-2">
               Revenue Management
             </Text>
-            <Text className="text-slate-300 text-base text-center leading-6">
+            <Text className="text-gray-600 text-base text-center leading-6">
               Track and manage your revenue streams with ease
             </Text>
           </View>
@@ -157,15 +156,15 @@ const IncomeScreen = () => {
       {/* Main Total Card */}
       <View className="mb-6">
         <LinearGradient
-          colors={['#059669', '#10B981', '#34D399']}
+          colors={['#2563EB', '#3B82F6', '#60A5FA']}
           className="p-7 rounded-3xl"
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
           style={{
             borderRadius: 32,
-            shadowColor: '#10B981',
+            shadowColor: '#2563EB',
             shadowOffset: { width: 0, height: 12 },
-            shadowOpacity: 0.4,
+            shadowOpacity: 0.2,
             shadowRadius: 24,
             elevation: 15,
           }}
@@ -200,34 +199,34 @@ const IncomeScreen = () => {
 
       {/* Enhanced Statistics Grid */}
       <View className="mb-8">
-        <Text className="text-white text-xl font-bold mb-6 text-center">This Month</Text>
+        <Text className="text-black text-xl font-bold mb-6 text-center">This Month</Text>
         
         {/* Monthly Total Card */}
         <View className="mb-4 mx-6">
           <View 
-            className="bg-slate-800/70 backdrop-blur-sm rounded-3xl p-6 border border-slate-700/40"
+            className="bg-white rounded-3xl p-6 border border-gray-200"
             style={{
               borderRadius: 24,
-              shadowColor: '#059669',
+              shadowColor: '#000000',
               shadowOffset: { width: 0, height: 6 },
-              shadowOpacity: 0.2,
+              shadowOpacity: 0.1,
               shadowRadius: 12,
               elevation: 8,
             }}
           >
             <View className="items-center mb-3">
               <View className="flex-row items-center justify-center mb-2">
-                <View className="bg-green-500/20 p-2 rounded-xl mr-2">
-                  <Ionicons name="calendar" size={20} color="#10B981" />
+                <View className="bg-blue-100 p-2 rounded-xl mr-2">
+                  <Ionicons name="calendar" size={20} color="#2563EB" />
                 </View>
-                <Text className="text-slate-300 text-sm font-semibold">Monthly Total</Text>
+                <Text className="text-gray-700 text-sm font-semibold">Monthly Total</Text>
               </View>
             </View>
             <View className="items-center">
-              <Text className="text-white text-xl font-bold text-center">
+              <Text className="text-black text-xl font-bold text-center">
                 LKR {thisMonthTotal.toLocaleString()}
               </Text>
-              <Text className="text-green-400 text-sm mt-2 text-center">
+              <Text className="text-blue-600 text-sm mt-2 text-center">
                 {thisMonthIncomes.length} entries
               </Text>
             </View>
@@ -237,9 +236,9 @@ const IncomeScreen = () => {
 
       {/* Income List Header */}
       <View className="flex-row items-center justify-between mb-6">
-        <Text className="text-white text-xl font-bold">Recent Income</Text>
-        <View className="bg-slate-700/60 px-4 py-2 rounded-2xl">
-          <Text className="text-slate-300 text-sm font-semibold">
+        <Text className="text-black text-xl font-bold">Recent Income</Text>
+        <View className="bg-gray-100 px-4 py-2 rounded-2xl">
+          <Text className="text-gray-600 text-sm font-semibold">
             {state.incomes.length} total
           </Text>
         </View>
@@ -249,125 +248,143 @@ const IncomeScreen = () => {
 
   const renderEmptyState = () => (
     <View 
-      className="bg-slate-800/50 rounded-3xl p-12 items-center border border-slate-700/40 mx-5"
+      className="bg-white rounded-3xl p-12 items-center border border-gray-200 mx-5"
       style={{
         borderRadius: 28,
-        shadowColor: '#1E293B',
+        shadowColor: '#000000',
         shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
+        shadowOpacity: 0.1,
         shadowRadius: 16,
         elevation: 10,
       }}
     >
-      <View className="bg-green-500/25 p-8 rounded-3xl mb-6 shadow-lg">
-        <Ionicons name="wallet" size={48} color="#10B981" />
+      <View className="bg-blue-100 p-8 rounded-3xl mb-6">
+        <Ionicons name="wallet" size={48} color="#2563EB" />
       </View>
-      <Text className="text-slate-300 text-xl font-bold mb-3">No income recorded yet</Text>
-      <Text className="text-slate-500 text-center text-base leading-6 mb-6">
+      <Text className="text-black text-xl font-bold mb-3">No income recorded yet</Text>
+      <Text className="text-gray-600 text-center text-base leading-6 mb-6">
         Start building your financial future by recording your first income source
       </Text>
       <TouchableOpacity 
         onPress={() => openModal()}
-        className="bg-green-600 px-8 py-4 rounded-2xl"
         style={{
-          shadowColor: '#059669',
+          backgroundColor: '#2563EB',
+          paddingHorizontal: 32,
+          paddingVertical: 16,
+          borderRadius: 16,
+          shadowColor: '#2563EB',
           shadowOffset: { width: 0, height: 6 },
-          shadowOpacity: 0.3,
+          shadowOpacity: 0.2,
           shadowRadius: 12,
           elevation: 8,
         }}
       >
-        <Text className="text-white font-bold text-base">Add First Income</Text>
+        <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 16 }}>Add First Income</Text>
       </TouchableOpacity>
     </View>
   );
 
   const renderIncomeItem = ({ item }: { item: Income }) => {
-    const truncateDescription = (desc: string, maxLength: number = 25) => {
-      return desc.length > maxLength ? `${desc.substring(0, maxLength)}...` : desc;
+    const truncateDescription = (desc: string, maxLength: number = 40) =>
+      desc.length > maxLength ? `${desc.substring(0, maxLength)}...` : desc;
+
+    const formatDate = (dateString: string) => {
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString();
+      } catch {
+        return dateString;
+      }
     };
 
     return (
-      <View 
-        className="bg-slate-800/50 rounded-3xl p-4 mb-3 mx-4 border border-slate-700/40"
-        style={{
-          borderRadius: 16,
-          shadowColor: '#1E293B',
-          shadowOffset: { width: 0, height: 3 },
-          shadowOpacity: 0.15,
-          shadowRadius: 6,
-          elevation: 4,
-        }}
-      >
-        <View className="flex-row items-center justify-between">
-          <View className="flex-row items-center flex-1">
-            <View className="bg-green-500/20 p-3 rounded-xl mr-3">
-              <Ionicons name="trending-up" size={22} color="#10B981" />
-            </View>
-            <View className="flex-1 mr-3">
-              <Text className="text-white font-bold text-sm" numberOfLines={1} ellipsizeMode="tail">
-                {truncateDescription(item.description, 20)}
-              </Text>
-              <Text className="text-slate-400 text-xs" numberOfLines={1}>
-                {new Date(item.date).toLocaleDateString()}
-              </Text>
-            </View>
-          </View>
-          
-          <View className="flex-row items-center">
-            <TouchableOpacity 
-              onPress={() => openModal(item)}
-              className="bg-blue-500/20 p-2 rounded-lg mr-2"
-            >
-              <Ionicons name="pencil" size={16} color="#60A5FA" />
-            </TouchableOpacity>
-            <TouchableOpacity 
-              onPress={() => handleDelete(item.id!, item.description)}
-              className="bg-red-500/20 p-2 rounded-lg"
-            >
-              <Ionicons name="trash" size={16} color="#EF4444" />
-            </TouchableOpacity>
-          </View>
-        </View>
-        
-        <View className="flex-row items-center justify-end mt-3 pt-3 border-t border-slate-600/30">
-          <View 
+      <View style={{ marginHorizontal: 12, marginBottom: 8 }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            backgroundColor: '#fff',
+            borderRadius: 16,
+            overflow: 'hidden',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 1 },
+            shadowOpacity: 0.06,
+            shadowRadius: 6,
+            elevation: 2,
+            borderWidth: 1,
+            borderColor: '#E6EEF9',
+          }}
+        >
+          {/* curved left stripe (blue) */}
+          <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              backgroundColor: 'rgba(16, 185, 129, 0.1)',
-              paddingHorizontal: 12,
-              paddingVertical: 6,
-              borderRadius: 12,
+              width: 12,
+              backgroundColor: '#2563EB',
+              borderTopLeftRadius: 16,
+              borderBottomLeftRadius: 16,
             }}
-          >
-            <View 
+          />
+
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', padding: 10 }}>
+            <View
               style={{
-                width: 24,
-                height: 24,
+                width: 40,
+                height: 40,
+                borderRadius: 10,
+                backgroundColor: '#DBEAFE',
                 alignItems: 'center',
                 justifyContent: 'center',
-                marginRight: 6,
-                backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                borderRadius: 6,
+                marginRight: 10,
               }}
             >
-              <Ionicons 
-                name="add" 
-                size={16} 
-                color="#10B981"
-              />
+              <Ionicons name="wallet" size={18} color="#2563EB" />
             </View>
-            <Text 
-              style={{
-                color: '#10B981',
-                fontSize: 16,
-                fontWeight: 'bold',
-                letterSpacing: 0.3,
-              }}
-            >
-              LKR {item.amount.toLocaleString()}
-            </Text>
+
+            <View style={{ flex: 1 }}>
+              <Text numberOfLines={1} ellipsizeMode="tail" style={{ fontSize: 13, fontWeight: '600', color: '#0F172A' }}>
+                {truncateDescription(item.description)}
+              </Text>
+              <Text style={{ fontSize: 11, color: '#64748B', marginTop: 3 }}>{formatDate(item.date)}</Text>
+            </View>
+
+            <View style={{ alignItems: 'flex-end', marginLeft: 8 }}>
+              <View
+                style={{
+                  backgroundColor: '#EEF2FF',
+                  paddingHorizontal: 8,
+                  paddingVertical: 2,
+                  borderRadius: 14,
+                }}
+              >
+                <Text style={{ color: '#2563EB', fontWeight: '700', fontSize: 11 }}>
+                  LKR {item.amount.toLocaleString()}
+                </Text>
+              </View>
+
+              <View style={{ flexDirection: 'row', marginTop: 6 }}>
+                <TouchableOpacity
+                  onPress={() => openModal(item)}
+                  style={{
+                    backgroundColor: '#F3F4F6',
+                    padding: 6,
+                    borderRadius: 8,
+                    marginRight: 8,
+                  }}
+                >
+                  <Ionicons name="pencil" size={14} color="#475569" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => handleDelete(item.id!, item.description)}
+                  style={{
+                    backgroundColor: 'transparent',
+                    padding: 6,
+                    borderRadius: 8,
+                  }}
+                >
+                  <Ionicons name="trash" size={16} color="#DC2626" />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
       </View>
@@ -375,7 +392,7 @@ const IncomeScreen = () => {
   };
 
   return (
-    <LinearGradient colors={['#0F172A', '#1E293B', '#334155']} style={{ flex: 1 }}>
+    <LinearGradient colors={['#FFFFFF', '#F8FAFC', '#E2E8F0']} style={{ flex: 1 }}>
       <FlatList
         data={state.incomes}
         renderItem={renderIncomeItem}
@@ -383,8 +400,8 @@ const IncomeScreen = () => {
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={state.loading ? (
           <View className="flex-1 justify-center items-center py-20">
-            <ActivityIndicator size="large" color="#10B981" />
-            <Text className="text-slate-400 mt-6 text-lg">Loading income data...</Text>
+            <ActivityIndicator size="large" color="#2563EB" />
+            <Text className="text-gray-600 mt-6 text-lg">Loading income data...</Text>
           </View>
         ) : renderEmptyState}
         contentContainerStyle={{ 
@@ -396,20 +413,19 @@ const IncomeScreen = () => {
           <RefreshControl 
             refreshing={refreshing} 
             onRefresh={onRefresh}
-            tintColor="#10B981"
-            colors={['#10B981']}
+            tintColor="#2563EB"
+            colors={['#2563EB']}
           />
         }
-        showsVerticalScrollIndicator={false}
       />
-
+      
       {/* Modern Floating Action Button */}
       <View 
         className="absolute bottom-20 right-5"
         style={{
-          shadowColor: '#10B981',
+          shadowColor: '#2563EB',
           shadowOffset: { width: 0, height: 12 },
-          shadowOpacity: 0.3,
+          shadowOpacity: 0.2,
           shadowRadius: 16,
           elevation: 15,
         }}
@@ -417,7 +433,7 @@ const IncomeScreen = () => {
         <TouchableOpacity 
           onPress={() => openModal()}
           style={{
-            backgroundColor: '#10B981',
+            backgroundColor: '#2563EB',
             borderRadius: 20,
             padding: 12,
             alignItems: 'center',
@@ -426,29 +442,6 @@ const IncomeScreen = () => {
             overflow: 'hidden',
           }}
         >
-          {/* Glassmorphism overlay */}
-          <View style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
-            borderRadius: 20,
-          }} />
-          
-          {/* Animated pulse effect */}
-          <View style={{
-            position: 'absolute',
-            top: -8,
-            left: -8,
-            right: -8,
-            bottom: -8,
-            backgroundColor: 'rgba(16, 185, 129, 0.3)',
-            borderRadius: 28,
-            opacity: 0.6,
-          }} />
-          
           <View style={{
             flexDirection: 'row',
             alignItems: 'center',

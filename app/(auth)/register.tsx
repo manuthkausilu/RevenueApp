@@ -1,6 +1,7 @@
-import { LinearGradient } from 'expo-linear-gradient'
-import { useRouter } from "expo-router"
-import React, { useState } from "react"
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -9,8 +10,8 @@ import {
   TextInput,
   TouchableOpacity,
   View
-} from "react-native"
-import { register } from "../../services/authService"
+} from "react-native";
+import { register } from "../../services/authService";
 
 const Register = () => {
   const router = useRouter()
@@ -73,131 +74,145 @@ const Register = () => {
 
   return (
     <LinearGradient
-      colors={['#1f2937', '#111827', '#000000']}
+      colors={['#FFFFFF', '#F8FAFC']}
       style={{ flex: 1 }}
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
     >
-      {/* Header Section */}
-      <View className="flex-1 justify-center px-6">
-        <View className="bg-gray-800 rounded-3xl p-8 mx-2" style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.15, shadowRadius: 20, elevation: 10 }}>
-          {/* Logo/Icon Section */}
+       {/* Header Section */}
+       <View className="flex-1 justify-center px-6">
+        <View className="rounded-3xl p-8 mx-2" style={{ backgroundColor: '#FFFFFF', shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.06, shadowRadius: 12, elevation: 6 }}>
+           {/* Logo/Icon Section */}
           <View className="items-center mb-8">
-            <LinearGradient
-              colors={['#374151', '#1f2937']}
-              style={{
-                width: 80,
-                height: 80,
-                borderRadius: 40,
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginBottom: 16
-              }}
-            >
-              <Text className="text-white text-3xl font-bold">📊</Text>
-            </LinearGradient>
-            <Text className="text-2xl font-bold text-white mb-2">Create Account</Text>
-            <Text className="text-gray-300 text-center">Join Revenue Tracker and manage your finances</Text>
+            <View style={{ width: 80, height: 80, borderRadius: 40, justifyContent: 'center', alignItems: 'center', marginBottom: 16, backgroundColor: '#DBEAFE' }}>
+              <Ionicons name="analytics" size={36} color="#2563EB" />
+            </View>
+            <Text style={{ fontSize: 20, fontWeight: '700', color: '#2563EB', marginBottom: 8 }}>Create Account</Text>
+            <Text style={{ color: '#64748B', textAlign: 'center' }}>Join Revenue Tracker and manage your finances</Text>
           </View>
-
-          {/* Input Fields */}
-          <View className="mb-6">
+ 
+           {/* Input Fields */}
+           <View className="mb-6">
             <View className="mb-4">
-              <Text className="text-gray-300 text-sm font-medium mb-2">Full Name</Text>
+              <Text style={{ color: '#2563EB', fontSize: 13, fontWeight: '600', marginBottom: 8 }}>Full Name</Text>
               <TextInput
                 placeholder="Enter your full name"
-                className="bg-gray-700 border-2 border-gray-600 rounded-xl px-4 py-4 text-white text-base"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor="#6B8BD6"
                 value={name}
                 onChangeText={setName}
                 autoCapitalize="words"
-                style={{ fontSize: 16 }}
+                style={{
+                  fontSize: 16,
+                  paddingVertical: 12,
+                  paddingHorizontal: 14,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: '#2563EB',
+                  backgroundColor: '#FFFFFF',
+                  color: '#0F172A'
+                }}
               />
             </View>
             <View className="mb-4">
-              <Text className="text-gray-300 text-sm font-medium mb-2">Email Address</Text>
+              <Text style={{ color: '#2563EB', fontSize: 13, fontWeight: '600', marginBottom: 8 }}>Email Address</Text>
               <TextInput
                 placeholder="Enter your email"
-                className="bg-gray-700 border-2 border-gray-600 rounded-xl px-4 py-4 text-white text-base"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor="#6B8BD6"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
                 autoCapitalize="none"
-                style={{ fontSize: 16 }}
+                style={{
+                  fontSize: 16,
+                  paddingVertical: 12,
+                  paddingHorizontal: 14,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: '#2563EB',
+                  backgroundColor: '#FFFFFF',
+                  color: '#0F172A'
+                }}
               />
             </View>
             
             <View className="mb-4">
-              <Text className="text-gray-300 text-sm font-medium mb-2">Password</Text>
+              <Text style={{ color: '#2563EB', fontSize: 13, fontWeight: '600', marginBottom: 8 }}>Password</Text>
               <TextInput
                 placeholder="Create a strong password"
-                className="bg-gray-700 border-2 border-gray-600 rounded-xl px-4 py-4 text-white text-base"
-                placeholderTextColor="#9CA3AF"
+                placeholderTextColor="#6B8BD6"
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
-                style={{ fontSize: 16 }}
+                style={{
+                  fontSize: 16,
+                  paddingVertical: 12,
+                  paddingHorizontal: 14,
+                  borderRadius: 12,
+                  borderWidth: 1,
+                  borderColor: '#2563EB',
+                  backgroundColor: '#FFFFFF',
+                  color: '#0F172A'
+                }}
               />
-              <Text className="text-xs text-gray-400 mt-1">
+              <Text style={{ fontSize: 12, color: '#94A3B8', marginTop: 8 }}>
                 Password should be at least 6 characters long
               </Text>
             </View>
-          </View>
-
-          {/* Register Button */}
-          <TouchableOpacity
-            onPress={handleRegister}
-            disabled={isLoadingReg}
-            style={{ borderRadius: 12, marginBottom: 16, shadowColor: '#374151', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 }}
-          >
-            <LinearGradient
-              colors={['#374151', '#1f2937']}
-              style={{
-                paddingVertical: 16,
-                borderRadius: 12,
-                justifyContent: 'center',
-                alignItems: 'center'
-              }}
-            >
-              {isLoadingReg ? (
-                <ActivityIndicator color="#fff" size="small" />
-              ) : (
-                <Text className="text-center text-lg font-semibold text-white">Create Account</Text>
-              )}
-            </LinearGradient>
-          </TouchableOpacity>
-
-          {/* Terms */}
-          <Text className="text-center text-xs text-gray-400 mb-4">
-            By creating an account, you agree to our Terms of Service and Privacy Policy
-          </Text>
-
-          {/* Divider */}
-          <View className="flex-row items-center mb-4">
-            <View className="flex-1 h-px bg-gray-600" />
-            <Text className="mx-4 text-gray-400 text-sm">or</Text>
-            <View className="flex-1 h-px bg-gray-600" />
-          </View>
-
-          {/* Login Link */}
-          <Pressable onPress={() => router.back()}>
-            <Text className="text-center text-base">
-              <Text className="text-gray-400">Already have an account? </Text>
-              <Text className="text-blue-400 font-semibold">Sign In</Text>
-            </Text>
-          </Pressable>
-        </View>
-      </View>
-
-      {/* Footer */}
-      <View className="pb-8 px-6">
-        <Text className="text-center text-gray-500 text-sm">
+           </View>
+ 
+           {/* Register Button */}
+           <TouchableOpacity
+             onPress={handleRegister}
+             disabled={isLoadingReg}
+             style={{ borderRadius: 12, marginBottom: 16, shadowColor: '#2563EB', shadowOffset: { width: 0, height: 6 }, shadowOpacity: 0.12, shadowRadius: 10, elevation: 6 }}
+           >
+             <LinearGradient
+               colors={['#2563EB', '#3B82F6']}
+               style={{
+                 paddingVertical: 14,
+                 borderRadius: 12,
+                 justifyContent: 'center',
+                 alignItems: 'center'
+               }}
+             >
+               {isLoadingReg ? (
+                 <ActivityIndicator color="#fff" size="small" />
+               ) : (
+                 <Text style={{ color: '#fff', fontSize: 16, fontWeight: '700' }}>Create Account</Text>
+               )}
+             </LinearGradient>
+           </TouchableOpacity>
+ 
+           {/* Terms */}
+           <Text style={{ textAlign: 'center', fontSize: 12, color: '#94A3B8', marginBottom: 12 }}>
+             By creating an account, you agree to our Terms of Service and Privacy Policy
+           </Text>
+ 
+           {/* Divider */}
+           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
+            <View style={{ flex: 1, height: 1, backgroundColor: '#E6EEF9' }} />
+            <Text style={{ marginHorizontal: 12, color: '#94A3B8', fontSize: 13 }}>or</Text>
+            <View style={{ flex: 1, height: 1, backgroundColor: '#E6EEF9' }} />
+           </View>
+ 
+           {/* Login Link */}
+           <Pressable onPress={() => router.back()}>
+             <Text style={{ textAlign: 'center', fontSize: 14 }}>
+               <Text style={{ color: '#94A3B8' }}>Already have an account? </Text>
+               <Text style={{ color: '#2563EB', fontWeight: '700' }}>Sign In</Text>
+             </Text>
+           </Pressable>
+         </View>
+       </View>
+ 
+       {/* Footer */}
+       <View style={{ paddingBottom: 24, paddingHorizontal: 16 }}>
+        <Text style={{ textAlign: 'center', color: '#94A3B8', fontSize: 12 }}>
           © 2024 Revenue Tracker. All rights reserved.
         </Text>
-      </View>
-    </LinearGradient>
-  )
-}
-
-export default Register
+       </View>
+     </LinearGradient>
+   )
+ }
+ 
+ export default Register

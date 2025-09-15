@@ -35,18 +35,12 @@ export const getExpenses = async (): Promise<Expense[]> => {
     } as Expense;
   });
   
-  // Debug: Log dates before sorting
-  console.log('Expense dates before sorting:', expenses.map(e => ({ desc: e.description, date: e.date })));
-  
   // Sort by date (latest first)
   const sortedExpenses = expenses.sort((a, b) => {
     const dateA = new Date(a.date);
     const dateB = new Date(b.date);
-    console.log(`Comparing: ${a.date} (${dateA.getTime()}) vs ${b.date} (${dateB.getTime()})`);
     return dateB.getTime() - dateA.getTime();
   });
-  
-  console.log('Expense dates after sorting:', sortedExpenses.map(e => ({ desc: e.description, date: e.date })));
   
   return sortedExpenses;
 };
@@ -82,3 +76,4 @@ export const getMonthlyExpenses = async (month: number, year: number): Promise<n
   });
   return monthlyExpenses.reduce((total, expense) => total + expense.amount, 0);
 };
+  

@@ -1,26 +1,31 @@
 import { Ionicons } from '@expo/vector-icons';
-import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
-import { Alert, Modal, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { Income } from '../services/incomeService';
+import { KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
-interface IncomeFormProps {
+export interface IncomeFormProps {
   visible: boolean;
   onClose: () => void;
-  onSave: (income: Omit<Income, 'id'>) => void;
-  editingIncome?: Income | null;
+  onSave: (data: { amount: number; description: string; date: string }) => Promise<void> | void;
+  editingIncome?: { id?: string; amount: number; description: string; date: string } | null;
+  primaryColor?: string;
 }
 
-const IncomeForm: React.FC<IncomeFormProps> = ({ visible, onClose, onSave, editingIncome }) => {
-  const [amount, setAmount] = useState('');
-  const [description, setDescription] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
+const IncomeForm: React.FC<IncomeFormProps> = ({
+  visible,
+  onClose,
+  onSave,
+  editingIncome = null,
+  primaryColor = '#2563EB',
+}) => {
+  const [amount, setAmount] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
+  const [date, setDate] = useState<string>('');
 
   useEffect(() => {
     if (editingIncome) {
-      setAmount(editingIncome.amount.toString());
-      setDescription(editingIncome.description);
-      setDate(editingIncome.date);
+      setAmount(String(editingIncome.amount));
+      setDescription(editingIncome.description || '');
+      setDate(editingIncome.date || '');
     } else {
       setAmount('');
       setDescription('');
@@ -28,267 +33,133 @@ const IncomeForm: React.FC<IncomeFormProps> = ({ visible, onClose, onSave, editi
     }
   }, [editingIncome, visible]);
 
-  const handleSave = () => {
-    if (!amount || !description) {
-      Alert.alert('Error', 'Please fill in all fields');
-      return;
-    }
-
-    const numericAmount = parseFloat(amount);
-    if (isNaN(numericAmount) || numericAmount <= 0) {
-      Alert.alert('Error', 'Please enter a valid amount');
-      return;
-    }
-
-    onSave({
-      amount: numericAmount,
-      description: description.trim(),
-      date,
-    });
+  const handleSubmit = async () => {
+    const amt = parseFloat(amount || '0') || 0;
+    await onSave({ amount: amt, description: description.trim(), date: date || new Date().toISOString().split('T')[0] });
   };
 
   return (
-    <Modal
-      visible={visible}
-      animationType="fade"
-      transparent={true}
-      onRequestClose={onClose}
-    >
-      <View style={{
-        flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-      }}>
-        <View style={{
-          width: '100%',
-          maxWidth: 420,
-          backgroundColor: 'transparent',
-        }}>
-          <LinearGradient
-            colors={['#0F172A', '#1E293B', '#334155']}
-            style={{
-              borderRadius: 24,
-              overflow: 'hidden',
-            }}
-          >
-            <ScrollView
-              showsVerticalScrollIndicator={false}
-              style={{ maxHeight: '90%' }}
-            >
-              {/* Header */}
+    <Modal visible={visible} animationType="slide" transparent>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: 'rgba(15,23,42,0.4)', justifyContent: 'flex-end' }}>
+          <View style={{
+            backgroundColor: '#fff',
+            borderTopLeftRadius: 16,
+            borderTopRightRadius: 16,
+            padding: 16,
+            minHeight: 320,
+          }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
               <View style={{
-                paddingHorizontal: 24,
-                paddingTop: 32,
-                paddingBottom: 24,
+                width: 44,
+                height: 44,
+                borderRadius: 10,
+                backgroundColor: `${primaryColor}20`,
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: 10,
               }}>
-                <View style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginBottom: 8,
-                }}>
-                  <View style={{
-                    backgroundColor: 'rgba(16, 185, 129, 0.2)',
-                    padding: 12,
-                    borderRadius: 16,
-                  }}>
-                    <Ionicons name="wallet" size={28} color="#10B981" />
-                  </View>
-                  
-                  <TouchableOpacity
-                    onPress={onClose}
-                    style={{
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                      padding: 10,
-                      borderRadius: 12,
-                    }}
-                  >
-                    <Ionicons name="close" size={24} color="rgba(255, 255, 255, 0.7)" />
-                  </TouchableOpacity>
-                </View>
-
-                <Text style={{
-                  fontSize: 28,
-                  fontWeight: '800',
-                  color: 'white',
-                  marginBottom: 8,
-                  textAlign: 'center',
-                }}>
+                <Ionicons name="wallet" size={22} color={primaryColor} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 18, fontWeight: '700', color: primaryColor }}>
                   {editingIncome ? 'Edit Income' : 'Add Income'}
                 </Text>
-                
-                <Text style={{
-                  fontSize: 16,
-                  color: 'rgba(16, 185, 129, 0.8)',
-                  fontWeight: '500',
-                  textAlign: 'center',
-                  marginBottom: 32,
-                }}>
-                  Record your revenue source
-                </Text>
+                <Text style={{ fontSize: 12, color: '#667085' }}>Quickly add your income</Text>
               </View>
+              <TouchableOpacity onPress={onClose} style={{ marginLeft: 8 }}>
+                <Ionicons name="close" size={22} color="#64748B" />
+              </TouchableOpacity>
+            </View>
 
-              {/* Form Fields */}
-              <View style={{ paddingHorizontal: 24 }}>
-                {/* Amount Field */}
-                <View style={{ marginBottom: 24 }}>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    color: 'white',
-                    marginBottom: 12,
-                  }}>
-                    Amount (LKR)
-                  </Text>
-                  <View style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: 16,
-                    borderWidth: 2,
-                    borderColor: 'rgba(16, 185, 129, 0.3)',
-                    paddingHorizontal: 20,
-                    paddingVertical: 18,
-                  }}>
-                    <TextInput
-                      value={amount}
-                      onChangeText={setAmount}
-                      placeholder="Enter amount"
-                      placeholderTextColor="rgba(255, 255, 255, 0.4)"
-                      keyboardType="numeric"
-                      style={{
-                        fontSize: 18,
-                        fontWeight: '600',
-                        color: 'white',
-                        padding: 0,
-                      }}
-                    />
-                  </View>
-                </View>
+            <ScrollView keyboardShouldPersistTaps="handled">
+              <Text style={{ color: primaryColor, fontWeight: '600', marginBottom: 6 }}>Amount</Text>
+              <TextInput
+                value={amount}
+                onChangeText={setAmount}
+                placeholder="0.00"
+                placeholderTextColor={`${primaryColor}60`}
+                keyboardType="numeric"
+                style={{
+                  borderWidth: 1,
+                  borderColor: primaryColor,
+                  backgroundColor: `${primaryColor}08`,
+                  borderRadius: 8,
+                  padding: 10,
+                  color: primaryColor,
+                  marginBottom: 12,
+                }}
+              />
 
-                {/* Description Field */}
-                <View style={{ marginBottom: 24 }}>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    color: 'white',
-                    marginBottom: 12,
-                  }}>
-                    Description
-                  </Text>
-                  <View style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: 16,
-                    borderWidth: 2,
-                    borderColor: 'rgba(16, 185, 129, 0.3)',
-                    paddingHorizontal: 20,
-                    paddingVertical: 18,
-                    minHeight: 80,
-                  }}>
-                    <TextInput
-                      value={description}
-                      onChangeText={setDescription}
-                      placeholder="Enter description"
-                      placeholderTextColor="rgba(255, 255, 255, 0.4)"
-                      multiline
-                      numberOfLines={3}
-                      style={{
-                        fontSize: 16,
-                        color: 'white',
-                        textAlignVertical: 'top',
-                        padding: 0,
-                        flex: 1,
-                      }}
-                    />
-                  </View>
-                </View>
+              <Text style={{ color: primaryColor, fontWeight: '600', marginBottom: 6 }}>Description</Text>
+              <TextInput
+                value={description}
+                onChangeText={setDescription}
+                placeholder="e.g., Freelance payment"
+                placeholderTextColor={`${primaryColor}60`}
+                style={{
+                  borderWidth: 1,
+                  borderColor: primaryColor,
+                  backgroundColor: `${primaryColor}08`,
+                  borderRadius: 8,
+                  padding: 10,
+                  color: primaryColor,
+                  marginBottom: 12,
+                }}
+              />
 
-                {/* Date Field */}
-                <View style={{ marginBottom: 32 }}>
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    color: 'white',
-                    marginBottom: 12,
-                  }}>
-                    Date
-                  </Text>
-                  <View style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                    borderRadius: 16,
-                    borderWidth: 2,
-                    borderColor: 'rgba(16, 185, 129, 0.3)',
-                    paddingHorizontal: 20,
-                    paddingVertical: 18,
-                  }}>
-                    <TextInput
-                      value={date}
-                      onChangeText={setDate}
-                      placeholder="YYYY-MM-DD"
-                      placeholderTextColor="rgba(255, 255, 255, 0.4)"
-                      style={{
-                        fontSize: 16,
-                        color: 'white',
-                        padding: 0,
-                      }}
-                    />
-                  </View>
-                </View>
-              </View>
+              <Text style={{ color: primaryColor, fontWeight: '600', marginBottom: 6 }}>Date</Text>
+              <TextInput
+                value={date}
+                onChangeText={setDate}
+                placeholder="YYYY-MM-DD"
+                placeholderTextColor={`${primaryColor}60`}
+                style={{
+                  borderWidth: 1,
+                  borderColor: primaryColor,
+                  backgroundColor: `${primaryColor}08`,
+                  borderRadius: 8,
+                  padding: 10,
+                  color: primaryColor,
+                  marginBottom: 18,
+                }}
+              />
 
-              {/* Action Buttons */}
-              <View style={{
-                paddingHorizontal: 24,
-                paddingBottom: 32,
-                gap: 16,
-              }}>
-                <TouchableOpacity
-                  onPress={handleSave}
-                  style={{
-                    backgroundColor: '#10B981',
-                    paddingVertical: 18,
-                    borderRadius: 16,
-                    alignItems: 'center',
-                    shadowColor: '#10B981',
-                    shadowOffset: { width: 0, height: 8 },
-                    shadowOpacity: 0.3,
-                    shadowRadius: 16,
-                    elevation: 8,
-                  }}
-                >
-                  <Text style={{
-                    fontSize: 18,
-                    fontWeight: '700',
-                    color: 'white',
-                  }}>
-                    {editingIncome ? 'Update Income' : 'Add Income'}
-                  </Text>
-                </TouchableOpacity>
-
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <TouchableOpacity
                   onPress={onClose}
                   style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    paddingVertical: 18,
-                    borderRadius: 16,
-                    alignItems: 'center',
+                    flex: 1,
+                    marginRight: 8,
+                    borderRadius: 10,
                     borderWidth: 1,
-                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    borderColor: primaryColor,
+                    paddingVertical: 12,
+                    alignItems: 'center',
+                    backgroundColor: 'transparent',
                   }}
                 >
-                  <Text style={{
-                    fontSize: 16,
-                    fontWeight: '600',
-                    color: 'rgba(255, 255, 255, 0.8)',
-                  }}>
-                    Cancel
-                  </Text>
+                  <Text style={{ color: primaryColor, fontWeight: '600' }}>Cancel</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={handleSubmit}
+                  style={{
+                    flex: 1,
+                    marginLeft: 8,
+                    borderRadius: 10,
+                    paddingVertical: 12,
+                    alignItems: 'center',
+                    backgroundColor: primaryColor,
+                  }}
+                >
+                  <Text style={{ color: '#fff', fontWeight: '700' }}>{editingIncome ? 'Update' : 'Add'}</Text>
                 </TouchableOpacity>
               </View>
             </ScrollView>
-          </LinearGradient>
+          </View>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 };
