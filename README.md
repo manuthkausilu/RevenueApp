@@ -1,3 +1,5 @@
+[![Demo Video](https://img.shields.io/badge/🎥-Demo_Video-blue)](https://your-demo-video-link.com)
+[![Download APK](https://img.shields.io/badge/📱-Download_APK-green)](https://your-apk-link.com)
 # 💰 Revenue App - Personal Finance Management
 
 A modern React Native application for managing your personal finances with real-time tracking of income and expenses. Built with Firebase backend and featuring a beautiful dark theme UI.
