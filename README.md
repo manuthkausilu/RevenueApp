@@ -1,4 +1,4 @@
-[![Demo Video](https://drive.google.com/file/d/1BEkyxCWjWgLmad4w0_WHpd4S5VD0eAOC/view?usp=drivesdk)
+[![▶️ Demo Video](https://img.shields.io/badge/▶️-Demo_Video-red)](https://drive.google.com/file/d/1BEkyxCWjWgLmad4w0_WHpd4S5VD0eAOC/view?usp=drivesdk)
 [![Download APK](https://img.shields.io/badge/📱-Download_APK-green)](https://expo.dev/accounts/manuth/projects/Biztrack/builds/0825b08d-02c7-41a0-9f65-3cbbde17f519)
 # 💰 Revenue App - Personal Finance Management
 
